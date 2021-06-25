@@ -7,7 +7,7 @@ import 'package:synchronized/synchronized.dart';
 import 'log.dart';
 
 class FileLogStorage extends LogStorage {
-  final _storedLogs = List<Log>();
+  final _storedLogs = <Log>[];
   final _lock = Lock();
 
   Future<String> get _localPath async {
@@ -21,7 +21,7 @@ class FileLogStorage extends LogStorage {
   }
 
   Future<List<Log>> retrieveLogs(String storageHash) async {
-    List<Log> storedLogs;
+    List<Log> storedLogs = [];
     final file = await _localFile(storageHash);
     if (await file.exists()) {
       String contents = await file.readAsString();

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:collection/collection.dart';
 
-import 'package:flutter/foundation.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'log_storage.dart';
@@ -13,14 +13,14 @@ class BufferedOutput extends Output {
   final int flushInterval;
   final int retryLimit;
   final int logCountLimit;
-  Timer _timer;
-  final _buffer = List<Log>();
-  final _chunks = List<BufferChunk>();
+  Timer? _timer;
+  final _buffer = <Log>[];
+  final _chunks = <BufferChunk>[];
   final _lock = Lock();
 
   BufferedOutput({
-    @required tagPattern,
-    @required LogStorage logStorage,
+    required tagPattern,
+    required LogStorage logStorage,
     this.flushInterval = 100,
     this.retryLimit = 3,
     this.logCountLimit = 5,
@@ -72,8 +72,8 @@ class BufferedOutput extends Output {
     if (_buffer.length == 0) {
       return;
     }
-    List<Log> logs;
-    BufferChunk chunk;
+    List<Log> logs = [];
+    BufferChunk chunk = BufferChunk(logs);
     await _lock.synchronized(() async {
       if (logCountLimit < _buffer.length) {
         logs = _buffer.sublist(0, logCountLimit);
@@ -113,9 +113,7 @@ class BufferedOutput extends Output {
   Future _reloadLogStorage() async {
     final logs = await _logStorage.retrieveLogs(storageHash);
     final filteredLogs = logs.where((log) {
-      return _chunks.firstWhere((chunk) => chunk.logs.contains(log),
-              orElse: () => null) ==
-          null;
+      return _chunks.firstWhereOrNull((chunk) => chunk.logs.contains(log)) == null;
     });
     await _lock.synchronized(() async {
       _buffer.clear();
@@ -136,9 +134,9 @@ class BufferChunk {
 
   BufferChunk(this.logs);
 
-  int get retryMillisecondsDelay {
-    return 2 * pow(2, retryCount - 1);
-  }
+  int get retryMillisecondsDelay =>
+     2 * pow(2, retryCount - 1).toInt();
+
 
   @override
   bool operator ==(Object other) =>

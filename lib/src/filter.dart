@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
-
 import 'log.dart';
 import 'tag_pattern.dart';
 
@@ -9,9 +7,8 @@ abstract class Filter {
   final TagPattern tagPattern;
 
   Filter({
-    @required String tagPattern,
-  })  : assert(tagPattern != null),
-        this.tagPattern = TagPattern(tagPattern);
+    required String tagPattern,
+  }) : this.tagPattern = TagPattern(tagPattern);
 
   List<Log> transform(Log log);
 
