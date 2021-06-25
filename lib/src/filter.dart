@@ -19,7 +19,7 @@ abstract class Filter {
   StreamTransformer<Log, List<Log>> get streamTransformer {
     return StreamTransformer<Log, List<Log>>.fromHandlers(
         handleData: (log, sink) {
-      sink.add(transform(log) ?? []);
+      sink.add(transform(log));
     });
   }
 }
