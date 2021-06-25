@@ -5,7 +5,7 @@ abstract class Output {
   final TagPattern tagPattern;
 
   Output({
-    required String tagPattern,
+    String? tagPattern,
   }) : this.tagPattern = TagPattern(tagPattern);
 
   bool where(Log log) {

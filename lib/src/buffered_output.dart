@@ -19,7 +19,7 @@ class BufferedOutput extends Output {
   final _lock = Lock();
 
   BufferedOutput({
-    required tagPattern,
+    String? tagPattern,
     required LogStorage logStorage,
     this.flushInterval = 100,
     this.retryLimit = 3,
