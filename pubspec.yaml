@@ -10,8 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  path_provider: ^1.6.5
-  synchronized: ^2.2.0
+  path_provider: ^2.0.2
+  synchronized: ^3.0.0
 
 dev_dependencies:
   flutter_test:
